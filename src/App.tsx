@@ -6,6 +6,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import Footer from "./components/footer/Footer";
+import Sensors from "./components/sensors/Sensors";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -28,9 +30,17 @@ const App: React.FC<{}> = () => {
         </Toolbar>
       </AppBar>
       <main>
-        <p>main section</p>
+        {/* Main section */}
+        <Sensors></Sensors>
       </main>
-      <p>footer</p>
+      {/* Footer */}
+      <Footer
+        text="copyright"
+        url="url"
+        footerMainText="main text"
+        footerTitle="footer title"
+      ></Footer>
+      {/* End footer */}
     </React.Fragment>
   );
 };
