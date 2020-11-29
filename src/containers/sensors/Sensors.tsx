@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 
-import Sensor from "../sensor/Sensor";
+import Sensor from "../../components/sensor/Sensor";
 import { SensorType } from "../../types/types";
 
 const sensors = [

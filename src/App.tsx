@@ -1,13 +1,14 @@
 import React from "react";
 
 import AppBar from "@material-ui/core/AppBar";
-import CameraIcon from "@material-ui/icons/PhotoCamera";
+import DevicesOtherIcon from "@material-ui/icons/DevicesOther";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Footer from "./components/footer/Footer";
-import Sensors from "./components/sensors/Sensors";
+import Sensors from "./containers/sensors/Sensors";
+import SensorStateSwitch from "./components/switch/SensorStateSwitch";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -23,10 +24,11 @@ const App: React.FC<{}> = () => {
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
-          <CameraIcon className={classes.icon} />
+          <DevicesOtherIcon className={classes.icon} />
           <Typography variant="h6" color="inherit" noWrap>
-            Da Header
+            Sensors Management
           </Typography>
+          <SensorStateSwitch></SensorStateSwitch>
         </Toolbar>
       </AppBar>
       <main>
