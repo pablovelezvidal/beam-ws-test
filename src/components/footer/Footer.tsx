@@ -39,7 +39,7 @@ const Footer: React.FC<FooterProps> = ({
         {footerMainText}
       </Typography>
       <Typography variant="body2" color="textSecondary" align="center">
-        {"opyright © "}
+        {"© "}
         <Link color="inherit" href={url}>
           {text}
         </Link>{" "}

@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import SensorButton from "../sensorButton/sensorButton";
 import { SensorType } from "../../types/types";
+import { Chip } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -42,7 +43,7 @@ const Sensor: React.FC<SensorType> = ({ id, name, unit, value, connected }) => {
       <Card className={classes.card}>
         <CardMedia
           className={classes.cardMedia}
-          image="https://source.unsplash.com/"
+          image="https://source.unsplash.com/random"
           title="Image title"
         />
         <CardContent className={classes.cardContent}>
@@ -50,11 +51,12 @@ const Sensor: React.FC<SensorType> = ({ id, name, unit, value, connected }) => {
             {name}
           </Typography>
           <Typography>
-            {unit} : {value}
+            {unit} :{" "}
+            {value && <Chip size="small" color="primary" label={value} />}
           </Typography>
         </CardContent>
         <CardActions>
-          <SensorButton connected={connected}></SensorButton>
+          <SensorButton connected={connected} id={id}></SensorButton>
         </CardActions>
       </Card>
     </Grid>

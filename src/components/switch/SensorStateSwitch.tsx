@@ -2,7 +2,12 @@ import React from "react";
 import Switch from "@material-ui/core/Switch";
 import { createStyles, Theme, withStyles } from "@material-ui/core/styles";
 import { Grid, Typography } from "@material-ui/core";
-import { purple } from "@material-ui/core/colors";
+
+import {
+  toggleConnectedSensors,
+  sensorsSelector,
+} from "../../slices/sensorsSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const SensorSwitch = withStyles((theme: Theme) =>
   createStyles({
@@ -45,10 +50,11 @@ const SensorSwitch = withStyles((theme: Theme) =>
 export interface SensorStateSwitchProps {}
 
 const SensorStateSwitch: React.FC<SensorStateSwitchProps> = () => {
-  const [checked, setChecked] = React.useState(false);
+  const dispatch = useDispatch();
+  const { toggleConnected } = useSelector(sensorsSelector);
 
-  const toggleChecked = () => {
-    setChecked((prev) => !prev);
+  const toggleConnectedFn = () => {
+    dispatch(toggleConnectedSensors());
   };
 
   return (
@@ -57,8 +63,8 @@ const SensorStateSwitch: React.FC<SensorStateSwitchProps> = () => {
         <Grid item>Show All</Grid>
         <Grid item>
           <SensorSwitch
-            checked={checked}
-            onChange={toggleChecked}
+            checked={toggleConnected}
+            onChange={toggleConnectedFn}
             name="checkedC"
           />
         </Grid>

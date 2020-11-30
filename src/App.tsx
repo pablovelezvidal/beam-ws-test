@@ -39,8 +39,8 @@ const App: React.FC<{}> = () => {
       <Footer
         text="copyright"
         url="url"
-        footerMainText="main text"
-        footerTitle="footer title"
+        footerMainText="Developed by Pablo Velez"
+        footerTitle="With joy"
       ></Footer>
       {/* End footer */}
     </React.Fragment>

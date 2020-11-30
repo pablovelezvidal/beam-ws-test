@@ -2,64 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 // eslint-disable-next-line import/no-cycle
 import { AppThunk } from "../store";
 
-const WS_ENDPOINT = "ws://localhost:5000";
+import { WS_BASE } from "../config";
 
 export type State = {
   loading: boolean;
   hasErrors: boolean;
   sensors: Array<any>;
+  toggleConnected: boolean;
 };
 
 const initialState: State = {
   loading: false,
   hasErrors: false,
   sensors: [],
+  toggleConnected: false,
 };
 
-const sensors = [
-  {
-    id: "0",
-    name: "Temperature",
-    connected: false,
-    unit: "°C",
-    value: null,
-  },
-  {
-    id: "1",
-    name: "Pressure",
-    connected: false,
-    unit: "kPa",
-    value: null,
-  },
-  {
-    id: "2",
-    name: "Humidity",
-    connected: false,
-    unit: "%",
-    value: null,
-  },
-  {
-    id: "3",
-    name: "PM2.5",
-    connected: false,
-    unit: "PM2.5",
-    value: null,
-  },
-  {
-    id: "4",
-    name: "PM10",
-    connected: false,
-    unit: "PM10",
-    value: null,
-  },
-  {
-    id: "5",
-    name: "Windsssss",
-    connected: false,
-    unit: "m/s",
-    value: null,
-  },
-];
+const ws = new WebSocket(WS_BASE);
 
 const sensorsSlice = createSlice({
   name: "sensors",
@@ -68,8 +27,20 @@ const sensorsSlice = createSlice({
     getSensors: (state) => {
       state.loading = true;
     },
-    getSensorsSuccess: (state, { payload }) => {
-      state.sensors = payload;
+    addSensorToSensors: (state, { payload }) => {
+      const isIn = state.sensors.some((sensor) => sensor.id === payload.id);
+      if (isIn) {
+        const sensors = state.sensors.map((sensor) => {
+          if (sensor.id === payload.id) {
+            sensor.value = payload.value;
+            sensor.connected = payload.connected;
+          }
+          return sensor;
+        });
+        state.sensors = sensors;
+      } else {
+        state.sensors = [...state.sensors, payload];
+      }
       state.loading = false;
       state.hasErrors = false;
     },
@@ -77,26 +48,38 @@ const sensorsSlice = createSlice({
       state.loading = false;
       state.hasErrors = true;
     },
+    toggleConnectedSensors: (state) => {
+      state.toggleConnected = !state.toggleConnected;
+    },
+    connectSensor: (state, payload) => {
+      console.log("jueputa payload", payload.payload);
+      ws.send('{ "command": "connect", "id": "' + payload.payload + '"}');
+    },
+    disconnectSensor: (state, payload) => {
+      ws.send('{ "command": "disconnect", "id": "' + payload.payload + '"}');
+    },
   },
 });
 
 export const {
   getSensors,
-  getSensorsSuccess,
   getSensorsFailure,
+  addSensorToSensors,
+  toggleConnectedSensors,
+  connectSensor,
+  disconnectSensor,
 } = sensorsSlice.actions;
 
 export const sensorsSelector = (state: State): any => state.sensors;
 
-// Asynchronous thunk action
 export const fetchSensors = (): AppThunk => {
   return async (dispatch: (arg0: any) => void) => {
     dispatch(getSensors());
 
     try {
-      // fetch from the ws for now hardcoded
-      const data = sensors;
-      dispatch(getSensorsSuccess(data));
+      ws.onmessage = (e: MessageEvent<any>) => {
+        dispatch(addSensorToSensors(JSON.parse(e.data)));
+      };
     } catch (error) {
       dispatch(getSensorsFailure());
     }
